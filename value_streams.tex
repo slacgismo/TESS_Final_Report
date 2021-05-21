@@ -1,0 +1,217 @@
+\chapter{Value Streams}
+
+%Value Stream document
+%https://docs.google.com/document/d/1694KLVUh9AiTdbEGTzOGeKvZa_WWRezuUaM3dza5jJQ/edit
+
+Transactive systems (TS) aggregate electric devices according to the individual preferences of consumers to manage distribution systems. Using a TS can shift loads to save energy procurement cost or avoid system peaks, among other benefits. The following chapter summarizes the most important value streams and costs associated with the implementation of TS, identifies relevant drivers, and names the associated stakeholders.
+
+\section{General Overview on Value Streams and Costs of TS}
+
+In a situation without a TS, utilities have only limited means to integrate flexible load into the management of the system, which restricts their ability to realize the savings associated with an optimized resource dispatch. In contrast, TS can achieve and monetize these savings through the coordination capabilities of a TS. The decision to implement a TS weighs the benefits and costs of such an implementation. \cref{tab:value_cost_components} summarizes relevant value and cost components of TS for the customers, the utility, and potential investors. 
+
+\begin{table}[!t]
+    \caption{Overview on value and cost components of Transactive Systems (TS)}
+    \label{tab:screening}
+    \centering
+    ~\\
+    \begin{tabular}{p{0.475\textwidth}p{0.475\textwidth}}
+        \hline
+        Value Components & Cost Components
+    \\  \hline \hline
+%\begin{itemize}
+    \tabitem Energy procurement cost savings & \tabitem Development cost of TS system \\
+    \tabitem Reduced demand charges for consumers and distribution companies & \tabitem Deployment costs, including ICT network, if needed \\
+    \tabitem Infrastructure investment deferral/savings & \tabitem DER and electrification equipment \\
+    \tabitem Efficient DER deployment and electrification & \tabitem Operating costs, including control room \\
+    \tabitem Revenue from ancillary services & \\
+    \tabitem Improved resilience and reliability  & \\
+    \tabitem Revenue from TS participation subscriptions & \\
+    \tabitem Additional uses of ICT network & 
+%\end{itemize} 
+    \\  \hline
+    \end{tabular}
+    \label{tab:value_cost_components}
+\end{table}
+
+On the value side, a TS enables reduced energy procurement cost through load shifting. Energy procurement cost savings can result from arbitrage in the wholesale market or because utilities are able to purchase low-cost“economy energy at low cost outside of fixed procurement contracts, if available in the market. In the long-term, improved load control capabilities can potentially also enable discounted prices for procurement contracts. 
+
+Second, high load peaks and load variability can be an important cost factor for a distribution utility, either because it must pay a demand charge to the utility operating the transmission grid or because it must invest in grid or reserve capacity itself. A TS can help to activate load flexibility, smooth out load peaks, and make more efficient use of existing distribution capacity. As a result, savings arise from lessening expensive demand charges (for consumers and the utility), or investment can be delayed or even avoided (for the utility, resulting in lower grid tariffs for consumers). This capability also helps to integrate DER and actively contribute to net load management, because the automation features of a TS reduce DER integration costs and enable access to DER resources for energy and ancillary services. 
+
+Third, the TS can be leveraged to provide ancillary services at the system level, e.g. reserve control and demand response. This capability provides an additional income stream which might grow with increasing shares of renewable energy in the wholesale market. 
+
+Fourth, the same control capabilities can streamline the response to emergencies, e.g. in the event of disconnection from the transmission grid, to coordinate local generation resources and prioritize high-value load resources. This benefit reduces costs originating from loss of power for customers as well as the non-quantifiable risks associated with a (longer) loss of power. 
+
+Fifth, TS participants might be required to pay a subscription fee to the TS operator. Such a fee can help cover the operating costs of the TS as well as the grid in general. Previously, customers have paid for those services through a fixed retail rate and the grid tariffs; in a TS, they may only pay for the marginal cost of electricity, so a fixed TS system access charge may be appropriate and provide a revenue stream. 
+
+Finally, the TS is paired with a comprehensive ICT network, which can provide other value for participants, such as improved internet access, and could be a revenue source for the TS.
+ 
+On the cost side, although it is designed to be modular and interoperable, the TS needs to be engineered for the distribution system of interest. This customization includes design questions (e.g. which appliances can be connected to the TS) as well as questions of technical integration (e.g. integration with the utility’s IT system and control room) and market integration (e.g., tariffs, and billing). 
+
+Second, the TS infrastructure needs to be deployed in the field, requiring equipment for customers to connect to the TS and, potentially, upgrades to the ICT infrastructure. 
+
+Third, the value provided by a TS depends on the amount of distributed resources in the system. Therefore, devices may have to be electrified and made `smart' and new appliances like solar panels or electric storage may need to be deployed. 
+
+Finally, the TS has an operating cost. While this can, in part, substitute for the costs of operating the conventional system, new cost components such as a cloud infrastructure or software integration efforts during updates may be incurred. 
+
+\section{Determinants of Value and Costs}
+
+A variety of factors determine whether a TS is a suitable choice for a specific distribution system. In general, the characteristics of the supply and demand side as well as the grid determine the magnitude of each of the value streams in a specific context. Furthermore, regulation can put boundaries on which value streams can be addressed or if additional costs arise. \cref{tab:value_drivers} provides a description on which factors favor or discourage TS.
+
+On the supply side, the following factors can increase the value of LEMs. If supply prices fluctuate and there is a large difference between peak vs. off-peak prices, the value of shifting load from one time window to another can be highly valuable. The same is true if a strong incentive exists to flatten system load, e.g. because of substantial demand charges. Often, the ability to monetize such value streams is limited by existing long-term power supply contracts. Such arrangements can lock in procurement cost structures for years (e.g. volumetric- versus capacity-based prices) and disincentivize the use of a TS, even if a TS would lower costs for the electric grid as a whole absent such contracts.  In such cases, re-negotiating contracts could be valuable. Regulation can potentially help to support dissolving non-favorable contracts if doing so increases customer welfare.
+
+On the demand side, the following factors generally increase the value of LEMs. The more volatile load is, the higher the potential benefit from a TS flattening this load. This is especially true if loads are flexible. In contrast, if load is inflexible, TS can produce high local prices and even divert incentives for efficient investment in local generation or grid capacity if o proper investment incentives are in place. If behind-the-meter flexible DER are present, TS can help to coordinate net demand.
+
+On the transmission and distribution system side, TS can be especially valuable for managing moderate grid capacity constraints and, thus, defer or avoid costly grid investment. TS may also facilitate beneficial electrification by effectively increasing system capacity, allowing the distribution utility to defer or avoid grid investment that would otherwise be required. If grid constraints are too tight, however, TS can produce high local prices which harm consumers and might divert efficient investment into the local grid infrastructure.
+
+\begin{table}[ht!]
+\centering
+%\renewcommand{\arraystretch}{1.5} % Default value: 1
+\footnotesize
+\begin{tabular}{>{\raggedright}m{2cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{4cm}| >{\centering\arraybackslash} m{2cm}}
+\toprule
+Large benefits		& \multicolumn{2}{c|}{\textbf{Supply}}	&  Small benefits
+\\ \midrule
+        & Large price swing & Flat procurement costs &
+\\ \hline
+        & Flexible procurement arrangements (e.g. WS market) & Inflexible procurement arrangement (e.g. long-term contract with fixed costs) &
+\\ \hline
+        & Presence of local generation & &
+\\
+\hline %\midrule
+		& \multicolumn{2}{c}{\textbf{Demand}}	& 
+\\ \hline
+        & Large peak/baseload ratio & Flat load shape &
+\\
+        & Flexible load & Inflexible load &
+\\
+\hline %\midrule
+		& \multicolumn{2}{c}{\textbf{Grid}}	& 
+\\ 
+        & Moderately constrained grid capacity & Highly constrained grid capacity or unconstrained grid capacity &
+\\ 
+\bottomrule
+\end{tabular}
+\caption{Overview on value drivers of Transactive Systems (TS)}
+\label{tab:value_drivers}
+\end{table}
+
+The realization of these value streams can be restricted by law or regulation. 
+First, in general, the more markets are available to the operator of a TS, the higher the realizable system value. For instance, if a utility is able to participate in the wholesale market or choose its suppliers, TS can potentially enable more energy procurement cost savings than in an environment with a monopolistic supplier. Examples for markets of interest are wholesale and balancing markets, demand response markets, and ancillary services markets. 
+Second, existing tariffs for consumers can be a barrier for implementation. Enabling factors include the option for customers to subscribe to a TS tariff,  if the existence of appliance-based (instead of customer-based tariffs applied to flexible and inflexible load alike), or alternative ways of how non-energy related components can be charged for (e.g. for TS-participants using the grid infrastructure). Furthermore, as TS are fairly new in large-scale implementation, long application times at state public utility commissions can delay necessary adjustments to operations and billing which arise during TS implementation. These adjustments can be necessary when integrating new appliances, if the DER structure of a system is changing, or if distributional issues arise between participants and non-participants. 
+Third, another determinant is the structure of regulated compensation with regard to operating (TS) versus capital costs (grid infrastructure). If investments into capital are favored over operating costs in terms of revenue, a TS might become less attractive.
+
+% Regulatory Barriers
+% Ability to use LEMs for infrastructure planning?
+% Distributional issues between participants and non-participants?
+% Retail choice?
+% Franchise issues?
+
+% Contractual Barriers
+% Volumetric rate?
+% Exposure to price variability?
+% Demand charge, etc?
+
+% TESS is business model agnostic!
+
+\section{Stakeholders}
+
+TS change the interaction of stakeholders in an electric system. The following \cref{tab:stakeholders} lists and defines the relevant stakeholders and describes potential cost and benefits of the introduction of a TS for them.
+ 
+% \begin{table}[!t]
+%     \caption{Overview on relevant stakeholders of Transactive Systems (TS)}
+%     \label{tab:stakeholders}
+%     \centering
+%     ~\\
+    \begin{longtable}{p{0.2\textwidth}p{0.35\textwidth}p{0.35\textwidth}}
+        \hline
+        Agent & Definition and Example & Implications of a TS
+    \\  \hline
+        Generation Company &
+Generates and sells electricity, e.g. Xcel &
+Increased load flexibility reduces need for firm supply and long-term procurement contracts of retailers
+\\  \hline
+        Distribution Grid Operator &
+Operates the distribution grid, e.g. HCE &
+TS can contribute to reduce the number of critical grid situation through shaving of peaks and load adjustment in response to RES inflow; TS can potentially produce large local load swings in response to sudden price changes
+\\  \hline
+        Retailer &
+Satisfies demand of end-users by procurement through wholesale markets and bilateral contracts, e.g. CCAs &
+TS reduces “firm” load on balance sheet of retailers which may become a pass-through entity
+\\  \hline
+        TS Platform Operator &
+Hosts, operates, and maintains the TS platform &
+New role
+\\  \hline
+        Consumers &
+End-users of electricity with different appliances, e.g. residential customer or businesses &
+\\  \hline
+        - Participating in TS &
+End-users who procure their demand through the TS &
+Necessary investments into flexibilization of loads and ICT; monthly bill changes may become more volatile; direction of bill changes depends on correlation of wholesale market prices and load pattern
+\\  \hline
+        - Not participating in TS &
+End-users who procure their demand through the retailer at a fixed price schedule (e.g. fixed retail rate or ToU rates) &
+Bills can change depending on how the flexibilization of loads within the TS changes the fixed retail rate 
+\\  \hline
+Prosumers & &
+\\  \hline
+        - Participating in TS &
+End-users with distributed generation who sell their generation and procure their demand through the TS &
+Necessary investments into flexibilization of loads and ICT; monthly bill changes may become more volatile; direction of bill changes depends on correlation of wholesale market prices and load pattern; Probably negative for customers with PV only if alternative is net-metering
+\\  \hline
+        - Not participating in TS &
+End-users with distributed generation who procure their demand through the retailer at a fixed price schedule (e.g. fixed retail rate or ToU rates) and sell their generation based on fixed conditions (e.g. net metering) &
+Bills can change depending on how the flexibilization of loads within the TS changes the fixed retail rate
+\\  \hline
+        Investors in TS &
+Third parties who finance the development and operation of the TS platform as well as load flexibility and the necessary ICT &
+New role; see separate documentation “Business Model of TS”
+\\  \hline
+    \caption{Overview on relevant stakeholders of Transactive Systems (TS)}
+    \label{tab:stakeholders}
+    \end{longtable}
+%\end{table}
+
+The following table furthermore lists the relevant stakeholders which set the rules for market and system operations and, therefore, influence how TS can be integrated into the overall system.
+
+\begin{table}[!t]
+    \caption{Overview on relevant stakeholders of Transactive Systems (TS)}
+    \label{tab:stakeholders}
+    \centering
+    ~\\
+    \begin{tabular}{p{0.2\textwidth}p{0.35\textwidth}p{0.35\textwidth}}
+        \hline
+        Agent & Definition and Example & Responsibilities
+    \\  \hline
+        FERC &
+Federal body which has authority to set wholesale and transmission rates in interstate commerce and make decisions on wholesale and transmission market rules  &
+Prior to introduction: Formulate relevant market rules which enable TS to realize their value
+->
+Designs general market rules under which TS integrate in the system
+\\  \hline
+NERC &
+Federal body which makes decisions on requirements for system operations pertaining to reliability &
+Develop rules to evaluate the contribution of TS for resiliency, capacity, reserves, etc.
+→
+Designs rules to evaluate resiliency, capacity, and reserve value
+\\  \hline
+State Regulators &
+State body which makes decisions on market rules and regulated prices, e.g. CPUC &
+Allow for TS as OPEX and acknowledge positive effect on CAPEX reduction
+→
+Determine how different cost components (e.g. OPEX and CAPEX) will be considered for rate setting
+\\  \hline
+System Operator &
+Operates the transmission grid and monitors and ensures the stability of the power system through functioning wholesale markets and ancillary service procurement, e.g. CAISO &
+TS can enable subsystems to participate in procurement mechanisms at the wholesale level, increasing the supply of flexibility; 
+TS can contribute to reduce the number of critical grid situation through shaving of peaks and load adjustment in response to RES inflow; TS can potentially produce large local load swings in response to sudden price changes
+→
+Design participation rules for wholesae and other markets as well as the deployment of resources for system management
+\\  \hline
+    \end{tabular}
+\end{table}
+
+
+
+
+

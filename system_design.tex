@@ -1,0 +1,96 @@
+% Explains the design details of HCE's TESS system
+
+\chapter{System Design (ML)}
+
+Transactive energy systems are designed to address the problem of optimally integrating large numbers of small resources into electric power system operations by dispatching them according to their preference or urgency and, thereby, realize a beneficial system behavior. For that purpose, transactive systems take advantage of market mechanisms which maximize social welfare by dispatching resources according to their self-proclaimed bids. \textbf{This part of the report covers the design of the market mechanism, including participation rules, relevant side conditions, bidding, clearing, settlement, and billing.}
+
+\section{Stakeholders of the TS in Basalt Vista}
+
+The following section describes the relevant stakeholders -- customers and HCE -- in Basalt Vista and their incentives in participating in the TS.
+
+\subsection{Customer Side}
+
+The customers of Basalt Vista own \textcolor{red}{single-family homes} which are equipped with photovoltaics, battery storage, electric HVAC systems, and electric vehicle chargers. Customers are subject to the residential tariff of HCE which charges a fixed retail rate per kWh consumed. Thanks to net metering, the retail rate is only applied to net consumption, i.e. customers' bill is reduced by the generation of the photovoltaics system. On top of the default residential tariff, customers are signed up to \textcolor{red}{Flexible DER tariff schedule}. In the context of this tariff, HCE rewards subscribers with an additional financial bonus in exchange for the possibility to control customers' DER to the benefit of the system. 
+
+In the context of TESS, we consider two characterizations of the conditions under which the demand side participated in the TS. First, we take the existing tariff system as given and design a TS around the \textit{status quo}, for customers participating with their photovoltaics systems. We call this design option the `deviation' option. In this case, customers remain subscribed to the original residential tariff including net metering. However, while the control of DER as part of the \textcolor{red}{Flexible DER tariff schedule} is currently based on a centralized optimization, we instead determine optimal dispatch by the TS. As a consequence, the financial reward paid is replaced by the payments collected by households through the TS.
+Second, we consider the case that the TS replaces the traditional tariff system. Instead, customers participate in the TS directly to procure or sell electricity (`direct'). For consumption contracted through the TS, the fixed retail rate does not apply anymore. 
+\textcolor{red}{In our design for HCE, however, we assume that the fixed retail tariff still applies to unresponsive loads which are technically or economically not able to participate in the TS.}
+
+\subsection{Retailer Side}
+
+HCE is the only retailer in the area and owns and manages the TS platform. It procures electricity from the transmission level, currently mostly via long-term procurement contracts with Xcel. These contracts shape the supply bid submitted by HCE to the TS. The cost of supply are constant under normal conditions. However, HCE is required to pay an additional fee at the time of coincident peak in the Xcel territory (i.e. primarily the state of Colorado). These fees are substantial and apply to the power requested at the time of coincident peak, irrespective of this time being potentially off-peak for the sub-system. In the near future, however, Colorado is planning to join the EIM balancing market. Then, the marginal opportunity cost of supply will be equivalent to the price charged within the balancing market. This will change the supply cost bid of HCE from being mostly constant to changing in real-time (e.g. every 5 or 15 minutes).
+
+Furthermore, HCE also owns and operates the connection of the sub-system to the transmission grid. As such, HCE is also monitoring the available capacity at the connecting sub-station and is able to consider this information in its supply bids. 
+
+\section{Design Modules}
+
+\subsection{Centralized Double Auction}
+
+For this implementation of TESS, we consider a double-sided centralized auction. Specifically, suppliers and demand submit their bids to the market operator who collects all bids and clears the market by choosing the clearing price which maximizes social welfare. Bids take the form of a quantity in $[kW]$ and a price bid in $[Monetary Units/kWh]$. The quantity represents the power at which the bidder is willing to supply/consume throughout the duration of the market interval. The price bid represents the maximum price which a consumer is willing to pay to consume (demand) or the minimum price at which a supplier is ready to provide electricity (supply). Price bids are submitted in $tokens$ for which TS participants assume that one token corresponds to one USD. Payments are then calculated as the product of the price bid and the energy consumed/supplied over the duration of the market interval. In our case, we apply a market interval of five minutes which complies with the frequency of many EIMs at which the real-time price updates and balances utmost flexibility with physical restrictions faced by appliances and the communication infrastructure.
+
+As the retailer, HCE participates as a bidder in two ways. First, HCE bids on behalf of the unresponsive loads which do not bid actively in the TS. This includes the baseload of households but also grid losses. The quantity bid is based on HCE's forecast for unresponsive demand while the price bid is infinite or corresponds to the maximum of the local system. Second, HCE submits a supply bid to represent the supply delivered from outside of the distribution system. The quantity corresponds to the maximum supply from the outside system which equals the available import capacity, e.g. determined by the relevant substation. With regard to price, the bid is determined by the procurement cost faced by HCE. The supply bid is limited by the available import capacity. If, for instance as a consequence of an emergency, import capacity is reduced below normal, this will be represented in the supply bid.
+
+At the beginning of each market interval, the market operator collects all bids and clears the market by determining the clearing price which balances demand and supply and maximizes social welfare. The clearing price is then published to all participants of the TS.
+
+In the case of TESS, HCE incorporates both the role of the retailer/supplier as well as the market operator. Such a coincidence of roles can be problematic if it incentives the market operator to artificially shorten supply, e.g. in order to collect scarcity rents or delay efficient grid investments. However, given that HCE is a coop and owned by its customers, we assume that its incentives are aligned to the benefit of the customers.
+
+\subsection{Settlement}
+
+In today's wholesale markets, participants are responsible that the quantity consumed corresponds to the amount which had been contracted on the wholesale market. If that is not the case, they are penalized for any deviations, thus incentivizing their compliance and, therefore, the balance of the overall system. 
+
+The settlement mechanism requires a sophisticated monitoring and billing system. We therefore generally assume that deviations are not strategic and level out over the population of bidders and suppliers. For any remaining deviations, the retailer balances these by additional or reduced purchases from the transmission level. 
+
+\subsection{Billing}
+
+Customers receive their bills at the end of the conventional billing period, i.e. one month. The bill contains any fixed tariffs as well as the cost for net consumption (for the customer scenario `deviation') or their unresponsive load and generation (`direct'). In addition, these costs are netted with any (positive or negative) income collected in the TS. As explained earlier, the income is calculated based on the clearing price which is in the monetary unit of tokens. To derive the actual value of a token, HCE determines the net savings achieved through the deployment of the TS and divides them by the number of tokens traded.
+This number is eventually used to convert households' income in the TS to an amount in USD which is used to determine the final bill.
+
+\section{Scenarios}
+
+In the following, we give detailed examples for the operation of the TS in the customer scenarios `deviation' and `direct', including customers' adopted bidding strategies.
+
+\subsection{Example 1: Fixed Procurement and Existing Tariff System}
+
+In this section, we give an example how TESS would integrate with the current framework of fixed procurement contracts and tariffs. For demonstration purposes, we focus on the Minimum Viable Product (MVP), i.e. photovoltaics only.
+
+What do customers' bids represent in this context? If customers do not participate in the TS, they pay a fixed retail rate for their net consumption, i.e, what they consumed minus what their photovoltaics system generated. As the retail rate is positive, it is individually rational for customers to let photovoltaics generate whenever possible as it reduces their monthly bill. Therefore, given the fixed retail rate plus net metering framework, the maximum will be generated and there is no additional supply which customers could bid into the TS. They could, however, reduce generation which is equivalent to increasing net load in the system. Therefore, these customers can place a buy bid. The quantity of this bid corresponds to the maximum net load \textit{change} they can offer while the price component reflects their willingness to pay for this load change - which is negative. As consuming more increases their bill by the fixed retail rate per unit, additional demand must be compensated (instead of paid for) by at least the fixed retail rate.
+
+\textit{Vice versa}, HCE would supply additional demand through the TS, if it is beneficial to do so. Under normal conditions, additional supply comes at the long-term fixed procurement cost including expenses for the maintenance and operations of the system - which corresponds to the fixed retail rate. However, if a coincident peak occurs, supply cost may significantly change. Given the capabilities of photovoltaics, we consider cases which reward utilities for \textit{increasing} net load, e.g. as a consequence of high DER influx and resulting congestion on the transmission level. Assuming that HCE would get paid an additional X USD/kWh fro additional load during such an event, their supply cost, their price component of the supply bid reduces to the difference of the long-term procurement cost minus X USD/kWh. This can result in a negative price bid.
+
+We now look at the resulting market allocation. Importantly, the TS does not coordinate electricity directly but \textit{changes from the baseline}, as expected given the existing tariff framework.
+Under normal conditions, customers place a negative price bid to increase their load while suppliers place a positive bid for increasing supply (see Figure X). As a result, supply and demand curves do not intersect and, thus, no bids are cleared. Under a peak condition, however, supply bids can be negative (see Figure Y). In that case, the market may clear and coordinate a change from the baseline. As the clearing price will be negative, buyers pay a negative price, i.e. receive tokens for increasing load. The volume of traded tokens is the product of the absolute clearing price and the capacity cleared.
+
+Finally, we consider the structure of monthly utility bills. As all customers are still part of the tariff system, they are first billed according to the net consumption and the fixed retail rate. This amount is corrected by the income in the TS. Let us assume that the customer has reduced generation from photovoltaics twice as a result of a net demand reducing peak event. In both cases, the customer received one token, i.e. two tokens in total. If, during the billing period, HCE saved 1,000 USD and traded 2,000 tokens, the value of a token is 0.5 USD. As a result, the customer receives 1 USD for the two tokens and his utility bill is reduced accordingly.
+
+\subsection{Example 2: EIM Procurement and Direct Participation of Customers}
+
+In this section, we give an example of how TESS would work if it would be an exclusive alternative to the existing tariff system. 
+%For demonstration purposes, we focus on the Minimum Viable Product (MVP), i.e. photovoltaics only.
+
+In this case, customers will not bid to change their supply or demand but the actual contribution. In the case of photovoltaics, customers estimate the available capacity for the upcoming market interval. This capacity will be placed as a supply bid for which the price component corresponds to the marginal cost of supply. While installation and maintenance costs are, of course, non-zero, we consider them as sunk during market operations and assume that it is rational for customers to bid zero. For any flexible appliance powered by electricity, customers will place a buy bid, with the quantity component representing the rated power of the appliance and the price bid reflecting the willingness to pay of the customer for this appliance to run during the upcoming market interval.
+
+On the retailer side, HCE places a supply bid to represent potential procurement from the transmission level and a buy bid for the unresponsive load. The quantity component of the supply bid depends on the available import capacity and the price component on the cost of supply. Again, under normal conditions, the cost of supply are positive while, under a net load reducing event as described in the previous section, the cost of supply may become negative. The quantity component of the buy bid for unresponsive load depends on the forecast for the upcoming market interval and the price component is infinite or equal to the price cap of the market as the retailer is required to serve this load.
+
+We now look at the resulting market allocation. Under `direct' trading, the actual dispatch and consumption is traded. 
+Under normal conditions, the supply bid of photovoltaics will be placed to the left of the import from the transmission level (which comes at a positive cost) and the price will be cleared at the import price (see Fig X).
+Under a peak condition, however, supply bids can be negative and photovoltaics not be cleared (see Figure Y). In that case, the clearing price will be negative, buyers pay a negative price, i.e. receive tokens for their consumption. 
+In both cases, the volume of traded tokens is the product of the absolute clearing price and the capacity cleared.
+
+Eventually, we consider the calculation of monthly utility bills. As the TS is an exclusive option to the existing tariff system, customers will receive two separate bills. For the unresponsive part of their loads, they will be charged according to the tariff system. For the responsive part, however, they will get paid/charged according to the market outcome. If the value of a token is 1 USD, for instance, they receive 100 USD if they earned 100 tokens through generation of photovoltaics systems. 
+
+\section{Open Design Questions/Challenges (all)}
+
+Deviation vs direct
+
+Settlement
+
+Expectation on value of tokens
+Token provision for other types of value provision (e.g., sharing of data, etc.)
+
+Shapley value + how to share benefits among users of the system
+
+Token as `currency' / fixed fees / behavioral effects of tokens (e.g. when recovering fixed costs)
+
+Regulatory questions...
+
+Include section on alternative token interpretation (loss as system fees?), issues related to currencies,... -> maybe separate sections

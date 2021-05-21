@@ -1,0 +1,57 @@
+\chapter{System Deployment}
+Deployment description
+Integration with TESS DB (ML+Jon)
+Make sure that valuation analysis tools work with deployment results (ML)
+Add bidding functions for EVs and storage (ML+Jon)
+
+\section{General Architecture}
+
+TESS database
+Appliances write status in db
+TESS coordinates resources on demand and supply side based on the information in the DB
+
+include graph for interactions
+
+\section{Appliance APIs... (Jon/Gustavo)}
+
+\section{Control Room (Wan-Lin)}
+
+\section{Market Platform (MLA)}
+
+TESS enables the dispatch of appliances according to their physical state, customer preferences, and local and time-specific supply cost. The market integration requires the following steps:
+
+\begin{enumerate}
+    \item Register customers and their appliances in the TESS database
+    \item Set up HCE operation requirements in TESS database
+    \item Replicate customers and their appliances on the cloud where TS is running
+    \item Operate the market
+\end{enumerate}
+
+We describe all steps in detail in the following sections. The detailed code can be found on the market page of the \href{https://github.com/slacgismo/TESS/tree/master/simulation}{GitHub repository}.
+
+\subsection{Customer Registration in TESS Database}
+
+To be able to participate in the TS, the customers must be correctly registered in the TESS database. This includes the following tables: service\_location, addresses, home\_hubs, pvs, meters. \textbf{service\_location} includes the customers of HCE. They are linked to a physical address which is recorded in \textbf{addresses} and can be identified by the corresponding address\_id. Households are represented by a home hub which participates on behalf of the customer in the TS. The matching of home hubs, indicated by their ID, and the respective service location and market they are participating in are listed in table \textbf{home\_hubs}. On the physical side, appliances are registered in the respective appliance database, e.g. photovoltaics systems in the table \textbf{pvs}. Every appliance participating the TS is furthermore measured by a meter. The matching of meters, indicated by their ID, and the respective service location are listed in table \textbf{meters}.
+\textcolor{red}{Does each appliance have a separate meter?}
+For each entry, the database records the timestamps of when the record was created and when it was updated for the last time. It also keeps information on if the respective home hub/device/customer/... is active or if it has been archived.
+
+\subsection{Setup of HCE Operations Requirements}
+
+The tables associated with HCE serve the purpose to link the control room and the physical assets such as transformers to the database and the following market operations as well as billing systems. The relevant tables are: utilities, rates, transformers, and markets. In table \textbf{utilities}, HCE registers itself. When the system may be expanded to larger territories, multiple utilities can be entered which enables the integration of multiple service territories on one cloud infrastructure. In table \textbf{rates}, HCE records the relevant rates which are needed for the billing of customers. \textcolor{red}{Where does rates\_id turn up, other than in rates?} 
+Table \textbf{transformers} lists the physical transformers of the system, including their capacity. As, in distribution systems, such transformers are usually installed at the beginning of feeder, they act as a connection point and bottleneck for the consumers connected to the feeder downstream. Therefore, the limited capacity of each transformer can be managed by a separate TS. All TS are listed in the table \textbf{markets}. Home hubs are assigned to specific TS (or market\_ids) according to their physical position in the grid.
+
+\subsection{Replication in the Cloud}
+
+The physical information in the TESS database is filled via the appliance APIs (e.g. current solar generation in table \textbf{pvs} or transformer load) and the control room (e.g. available transformer capacity or cost of supply). This information is read out and used to replicate the home hubs as well as HCE as the responsible retailer as Python objects on the cloud. The home hubs are kept as separate objects to keep information private to the customers they belong to.
+
+\subsection{Market Operations}
+
+At each market interval, the agents representing the home hubs on the cloud update their physical states based on the information available on the TESS database. In particular, this physical state information is measured by the meter and recorded in the table \textbf{meter\_intervals}, e.g. solar generation. 
+
+Based on this information, the replicated stakeholders form dispatch bids, i.e. how much they are willing to pay for consumption or the minimum price for supply. Wholesale market supply is submitted by the agents representing HCE. The price bid corresponds to the cost of supply and the quantity bid to the import capacity. Both are recorded in \textbf{hce\_bids}. The market is cleared in a welfare-maximizing way. The result is characterized by an equilibrium price under which supply equals demand and saved in table \textbf{market\_intervals}.
+
+After market clearing, home hubs compare their bids to the equilibrium price. If the bid price exceeds the equilibrium price (for demand) or is less (for supply), the bid was cleared. If price and bid are equal, the bid is partially cleared, for a share of $\alpha \in (0,1)$. This information is written to column `mode' in table \textbf{meter\_interval}. This information will be picked up by the appliance API and physically implemented.
+
+\section{Budget Balancing and Billing}
+
+Include Chris
